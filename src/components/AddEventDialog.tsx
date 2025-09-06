@@ -19,7 +19,7 @@ interface AddEventDialogProps {
 export const AddEventDialog = ({ trigger }: AddEventDialogProps) => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
-  const [time, setTime] = useState("");
+  const [time, setTime] = useState("12:00 AM");
   const [date, setDate] = useState<Date>();
   const [type, setType] = useState<"meeting" | "review" | "call" | "workshop" | "planning">("meeting");
   const { addEvent } = useEvents();
@@ -43,7 +43,7 @@ export const AddEventDialog = ({ trigger }: AddEventDialogProps) => {
     
     // Reset form
     setTitle("");
-    setTime("");
+    setTime("12:00 AM");
     setDate(undefined);
     setType("meeting");
     setOpen(false);
@@ -76,19 +76,58 @@ export const AddEventDialog = ({ trigger }: AddEventDialogProps) => {
           
           <div className="space-y-2">
             <Label htmlFor="time">Time</Label>
-            <Input
-              id="time"
-              type="time"
-              value={time}
-              onChange={(e) => {
-                const timeValue = e.target.value;
-                const [hours, minutes] = timeValue.split(':');
-                const hour = parseInt(hours);
-                const ampm = hour >= 12 ? 'PM' : 'AM';
-                const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
-                setTime(`${displayHour}:${minutes} ${ampm}`);
-              }}
-            />
+            <div className="flex gap-2">
+              <Select value={time.split(':')[0] || '12'} onValueChange={(hour) => {
+                const currentMinute = time.split(':')[1]?.split(' ')[0] || '00';
+                const currentPeriod = time.includes('PM') ? 'PM' : 'AM';
+                setTime(`${hour}:${currentMinute} ${currentPeriod}`);
+              }}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder="Hour" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                    <SelectItem key={hour} value={hour.toString()}>
+                      {hour.toString().padStart(2, '0')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={time.split(':')[1]?.split(' ')[0] || '00'} onValueChange={(minute) => {
+                const currentHour = time.split(':')[0] || '12';
+                const currentPeriod = time.includes('PM') ? 'PM' : 'AM';
+                setTime(`${currentHour}:${minute} ${currentPeriod}`);
+              }}>
+                <SelectTrigger className="flex-1">
+                  <SelectValue placeholder="Min" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                    <SelectItem key={minute} value={minute.toString().padStart(2, '0')}>
+                      {minute.toString().padStart(2, '0')}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select value={time.includes('PM') ? 'PM' : 'AM'} onValueChange={(period) => {
+                const currentHour = time.split(':')[0] || '12';
+                const currentMinute = time.split(':')[1]?.split(' ')[0] || '00';
+                setTime(`${currentHour}:${currentMinute} ${period}`);
+              }}>
+                <SelectTrigger className="w-20">
+                  <SelectValue placeholder="AM/PM" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="AM">AM</SelectItem>
+                  <SelectItem value="PM">PM</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Selected time: {time || "No time selected"}
+            </p>
           </div>
 
           <div className="space-y-2">
