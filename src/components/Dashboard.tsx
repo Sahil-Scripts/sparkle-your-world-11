@@ -111,7 +111,10 @@ export const Dashboard = () => {
                 description={task.description}
                 status={task.status}
                 priority={task.priority}
-                assignees={[{ name: task.assignee, initials: task.assignee.substring(0, 2).toUpperCase() }]}
+                assignees={[{ 
+                  name: task.assignee || "Unassigned", 
+                  initials: (task.assignee || "UN").substring(0, 2).toUpperCase() 
+                }]}
                 dueDate={task.dueDate}
               />
             </div>
