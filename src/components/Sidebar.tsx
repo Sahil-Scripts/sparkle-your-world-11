@@ -31,8 +31,12 @@ export const Sidebar = () => {
 
       {/* Logo */}
       <div className={`flex items-center gap-3 mb-8 mt-2 ${isCollapsed ? 'justify-center' : ''}`}>
-        <div className="w-7 h-7 bg-gradient-primary rounded-md flex items-center justify-center shadow-glow">
-          <span className="text-white font-bold text-sm">✕</span>
+        <div className="w-7 h-7 bg-gradient-primary rounded-md flex items-center justify-center shadow-glow overflow-hidden">
+          <img 
+            src="/lovable-uploads/1f7c44f0-9032-4511-b93e-628ee655f152.png" 
+            alt="SynergySphere Logo" 
+            className="w-full h-full object-contain"
+          />
         </div>
         {!isCollapsed && (
           <span className="font-semibold text-lg text-foreground">SynergySphere</span>
