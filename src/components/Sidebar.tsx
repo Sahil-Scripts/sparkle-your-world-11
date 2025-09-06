@@ -35,10 +35,7 @@ export const Sidebar = () => {
           <span className="text-white font-bold text-sm">✕</span>
         </div>
         {!isCollapsed && (
-          <>
-            <span className="font-semibold text-lg text-foreground">G.Take</span>
-            <span className="text-xs text-muted-foreground ml-auto">GPT-ⓘ ASSITMENT</span>
-          </>
+          <span className="font-semibold text-lg text-foreground">SynergySphere</span>
         )}
       </div>
 
